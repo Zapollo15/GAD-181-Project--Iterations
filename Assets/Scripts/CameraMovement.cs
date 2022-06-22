@@ -16,6 +16,10 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = offset + camper.transform.position;
+        if (camper != null)
+        {
+            transform.position = offset + camper.transform.position;
+
+        }
     }
 }

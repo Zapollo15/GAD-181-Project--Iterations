@@ -64,12 +64,14 @@ public class CamperMovement : MonoBehaviour
         }
     }
 
-    void DashOnShift(int dashSpeed) // we can put a float variable in these brackets when we call this function to specify negetic speed or positive speed when dashing
+    bool DashOnShift(int dashSpeed) // we can put a float variable in these brackets when we call this function to specify negetic speed or positive speed when dashing
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) )
+        if (Input.GetKey(KeyCode.LeftShift) )
         {
             rb.AddForce(new Vector3(dashSpeed  * Time.deltaTime, 0, 0), ForceMode.Impulse);
+            return true;
         }
+        return false;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -77,7 +79,10 @@ public class CamperMovement : MonoBehaviour
         if (collision.gameObject.tag == "Floor")
         {
             grounded = true;
+
         }
+
+        //ENEMY IF STATEMENTS
 
         if (collision.gameObject.tag == "basic enemy")
         {
@@ -90,9 +95,34 @@ public class CamperMovement : MonoBehaviour
             DestroyGameObject();
         }
 
+        if (collision.gameObject.tag == "dead")
+        {
+            Destroy(collision.gameObject.transform.parent.gameObject);
+        }
+
+        if (collision.gameObject.tag == "spiky")
+        {
+            trns.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            lifecounter++;
+        }
+
+        if (collision.gameObject.tag == "spiky" && lifecounter == 2 &&  !DashOnShift(10))
+        {
+            DestroyGameObject();
+
+        }
+
+        if (collision.gameObject.tag == "spiky" && DashOnShift(10))
+        {
+            trns.localScale = new Vector3(1, 1, 1);
+            Destroy(collision.gameObject);
+            //Debug.Log("Collided");
+        }
+
         void DestroyGameObject()
         {
-            Destroy(gameObject);
+           Destroy(gameObject);
         }
+
     }
 }
