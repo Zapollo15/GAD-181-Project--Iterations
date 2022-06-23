@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CamperMovement : MonoBehaviour
 {
+    public bool IsDebugMode;
+    [Header("move settings")]
     Rigidbody rb;
     public int speed = 1500;
     public int DashSpeed = 20;
@@ -25,9 +28,10 @@ public class CamperMovement : MonoBehaviour
 
     void Update()
     {
-            MovePlayer(); // checks input and moves player
-            Jump();// checks input, makes player jump
-            IncreaseGravityWhileJumping();
+        MovePlayer(); // checks input and moves player
+        Jump();// checks input, makes player jump
+        IncreaseGravityWhileJumping();
+        EnterDebugMode();
     }
 
 
@@ -86,13 +90,7 @@ public class CamperMovement : MonoBehaviour
 
         if (collision.gameObject.tag == "basic enemy")
         {
-            trns.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-            lifecounter++;
-        }
-
-        if (collision.gameObject.tag == "basic enemy" && lifecounter == 2)
-        {
-            DestroyGameObject();
+            DecreasePlayerLife();
         }
 
         if (collision.gameObject.tag == "dead")
@@ -100,29 +98,43 @@ public class CamperMovement : MonoBehaviour
             Destroy(collision.gameObject.transform.parent.gameObject);
         }
 
-        if (collision.gameObject.tag == "spiky")
+        if (collision.gameObject.tag == "spiky"  &&  !DashOnShift(DashSpeed)) // hitting spiky with no dash, makes player lose life
         {
-            trns.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-            lifecounter++;
+            DecreasePlayerLife();
         }
-
-        if (collision.gameObject.tag == "spiky" && lifecounter == 2 &&  !DashOnShift(10))
+        else if (collision.gameObject.tag == "spiky" && DashOnShift(DashSpeed))// hitting spiky with  dash, makes player get life
         {
-            DestroyGameObject();
-
-        }
-
-        if (collision.gameObject.tag == "spiky" && DashOnShift(10))
-        {
-            trns.localScale = new Vector3(1, 1, 1);
+            IncreaseplayerLife();
             Destroy(collision.gameObject);
-            //Debug.Log("Collided");
         }
+    }
 
-        void DestroyGameObject()
+    void DecreasePlayerLife() 
+    {
+        trns.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        lifecounter++;
+        CheckForGameOver(); 
+    }
+    void IncreaseplayerLife()
+    {
+        trns.localScale = new Vector3(1, 1, 1);
+        lifecounter--;
+    }
+    void CheckForGameOver() // destroy player if life counter is 2
+    {
+        if ( lifecounter == 2 && !IsDebugMode)
         {
-           Destroy(gameObject);
+            Destroy(gameObject);
         }
-
+    }
+    void EnterDebugMode() // allows player to reatsrt scene automaticly or by input
+    {
+        if (IsDebugMode) 
+        {
+            if (lifecounter == 2 || gameObject.transform.position.y < -5 || Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
     }
 }
