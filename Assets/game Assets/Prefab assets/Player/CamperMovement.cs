@@ -70,7 +70,7 @@ public class CamperMovement : MonoBehaviour
 
     bool DashOnShift(int dashSpeed) // we can put a float variable in these brackets when we call this function to specify negetic speed or positive speed when dashing
     {
-        if (Input.GetKey(KeyCode.LeftShift) )
+        if (Input.GetKeyDown(KeyCode.LeftShift) )
         {
             rb.AddForce(new Vector3(dashSpeed  * Time.deltaTime, 0, 0), ForceMode.Impulse);
             return true;

@@ -18,7 +18,7 @@ public class CameraMovement : MonoBehaviour
     {
         if (camper != null)
         {
-            transform.position = offset + camper.transform.position;
+            transform.position = offset + camper.transform.position ;
 
         }
     }
