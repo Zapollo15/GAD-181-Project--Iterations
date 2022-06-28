@@ -17,6 +17,11 @@ public class MenuButtons : MonoBehaviour
         Debug.Log("Quit Successfully");
     }
 
+    public void TryAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
 
 
 }
