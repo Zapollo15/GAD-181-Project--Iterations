@@ -16,10 +16,12 @@ public class CamperMovement : MonoBehaviour
     public bool grounded;
     private int lifecounter;
     Transform trns;
+    GameManager gameManager;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        
         rb.drag = 5; // adds more friction , prevents sliding when moving
 
         trns = GetComponent<Transform>();
@@ -122,9 +124,10 @@ public class CamperMovement : MonoBehaviour
     }
     void CheckForGameOver() // destroy player if life counter is 2
     {
-        if ( lifecounter == 2 && !IsDebugMode)
+        if ( lifecounter >= 2 && !IsDebugMode)
         {
-            Destroy(gameObject);
+            gameManager = FindObjectOfType<GameManager>();
+            gameManager.GameOverState();   
         }
     }
     void EnterDebugMode() // allows player to reatsrt scene automaticly or by input

@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beab3137a02539d4db620e9b9e6c9b4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsDebugMode: 0
   speed: 65
   DashSpeed: -10
   jump: 0.3

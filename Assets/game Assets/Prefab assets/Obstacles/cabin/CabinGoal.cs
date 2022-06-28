@@ -7,10 +7,13 @@ public class CabinGoal : MonoBehaviour
 {
     public GameObject Camper;
     public TextMeshProUGUI textMeshPro;
+   
+    GameManager gameManager;
 
     void Start()
     {
         textMeshPro.enabled = false;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -23,6 +26,8 @@ public class CabinGoal : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             textMeshPro.enabled = true;
+            gameManager.DecreaseAmountOfLevelsToPlay();
+            gameManager.Invoke("LoadNextlevel",2);
             Debug.Log("Player finished level");
         }
         
